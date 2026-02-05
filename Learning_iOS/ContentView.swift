@@ -17,7 +17,7 @@ struct ContentView: View {
 //            Image(systemName: "globe")
 //                .imageScale(.large)
 //                .foregroundStyle(.tint)
-            Text("Привет, iOS <3 👋")
+            Text("Привет, iOS <3) 👋")
                 .font(.largeTitle)
                 .foregroundStyle(.blue)
             

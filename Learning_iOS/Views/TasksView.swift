@@ -1,25 +1,28 @@
 import SwiftUI
 
 struct TasksView: View {
+    @EnvironmentObject private var localization: LocalizationManager
     @StateObject private var viewModel = TasksViewModel()
     @State private var isPresentingAdd = false
 
     var body: some View {
+        let _ = localization.currentLanguage
+
         List {
             Section {
                 NavigationLink {
                     TasksUIKitHostView()
-                        .navigationTitle("Tasks (UIKit)")
+                        .navigationTitle("\(L("tab_tasks")) (UIKit)")
                         .navigationBarTitleDisplayMode(.inline)
                 } label: {
-                    Text("Open UIKit Version")
+                    Text(L("open_uikit_version"))
                         .foregroundStyle(AppTheme.accentGold)
                 }
                 .listRowBackground(AppTheme.cardBackground)
             }
 
             if viewModel.tasks.isEmpty {
-                Text("No tasks yet. Add one to start focused work.")
+                Text(L("empty_tasks"))
                     .font(.subheadline)
                     .foregroundStyle(AppTheme.textSecondary)
                     .padding(.vertical, 12)
@@ -39,7 +42,7 @@ struct TasksView: View {
         }
         .listStyle(.plain)
         .appScreenBackground()
-        .navigationTitle("Tasks")
+        .navigationTitle(L("tab_tasks"))
         .navigationBarTitleDisplayMode(.large)
         .toolbarBackground(AppTheme.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
@@ -95,14 +98,17 @@ private struct TaskRow: View {
 }
 
 private struct AddTaskSheet: View {
+    @EnvironmentObject private var localization: LocalizationManager
     @Environment(\.dismiss) private var dismiss
     @State private var title = ""
     let onSave: (String) -> Void
 
     var body: some View {
+        let _ = localization.currentLanguage
+
         NavigationStack {
             VStack(spacing: 16) {
-                TextField("Task title", text: $title)
+                TextField(L("task_title_placeholder"), text: $title)
                     .padding(12)
                     .background(AppTheme.cardBackground)
                     .overlay(
@@ -112,7 +118,7 @@ private struct AddTaskSheet: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .foregroundStyle(AppTheme.textPrimary)
 
-                Button("Add Task") {
+                Button(L("add_task")) {
                     onSave(title)
                     dismiss()
                 }
@@ -122,15 +128,14 @@ private struct AddTaskSheet: View {
             }
             .padding(16)
             .appScreenBackground()
-            .navigationTitle("New Task")
+            .navigationTitle(L("new_task"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(L("cancel")) { dismiss() }
                         .foregroundStyle(AppTheme.accentGold)
                 }
             }
         }
     }
 }
-

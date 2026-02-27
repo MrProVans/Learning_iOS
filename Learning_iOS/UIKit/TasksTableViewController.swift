@@ -9,7 +9,7 @@ final class TasksTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Tasks"
+        title = L("tab_tasks")
         tableView.backgroundColor = .appBackground
         tableView.separatorColor = UIColor.appTextSecondary.withAlphaComponent(0.2)
         navigationItem.rightBarButtonItem = editButtonItem
@@ -25,7 +25,7 @@ final class TasksTableViewController: UITableViewController {
         cell.backgroundColor = .appCardBackground
         cell.textLabel?.text = task.title
         cell.textLabel?.textColor = .appTextPrimary
-        cell.detailTextLabel?.text = task.isDone ? "Completed" : "Pending"
+        cell.detailTextLabel?.text = task.isDone ? L("completed") : L("pending")
         cell.detailTextLabel?.textColor = .appTextSecondary
         cell.accessoryType = task.isDone ? .checkmark : .none
         cell.tintColor = .appAccentGold

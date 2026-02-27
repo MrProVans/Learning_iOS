@@ -1,25 +1,59 @@
 import Foundation
 
-struct EnergyCategory: Identifiable {
-    let id = UUID()
-    let title: String
+struct EnergyCategory: Identifiable, Codable, Hashable {
+    let id: String
+    let titleKey: String
     let sfSymbolName: String
-    let description: String
+    let descriptionKey: String
 }
 
-struct Habit: Identifiable {
+struct EnergyEntry: Identifiable, Codable {
     let id: UUID
-    let title: String
-    let sfSymbolName: String
+    let categoryId: String
+    let date: Date
+    let rating: Int
+    let note: String?
+
+    init(id: UUID = UUID(), categoryId: String, date: Date, rating: Int, note: String? = nil) {
+        self.id = id
+        self.categoryId = categoryId
+        self.date = date
+        self.rating = rating
+        self.note = note
+    }
+}
+
+struct Habit: Identifiable, Codable, Equatable {
+    let id: UUID
+    var title: String
+    var sfSymbolName: String
     var isDoneToday: Bool
     var streak: Int
+    var reminderEnabled: Bool
+    var reminderHour: Int
+    var reminderMinute: Int
+    var lastCompletedDate: Date?
 
-    init(id: UUID = UUID(), title: String, sfSymbolName: String, isDoneToday: Bool = false, streak: Int = 0) {
+    init(
+        id: UUID = UUID(),
+        title: String,
+        sfSymbolName: String,
+        isDoneToday: Bool = false,
+        streak: Int = 0,
+        reminderEnabled: Bool = false,
+        reminderHour: Int = 20,
+        reminderMinute: Int = 0,
+        lastCompletedDate: Date? = nil
+    ) {
         self.id = id
         self.title = title
         self.sfSymbolName = sfSymbolName
         self.isDoneToday = isDoneToday
         self.streak = streak
+        self.reminderEnabled = reminderEnabled
+        self.reminderHour = reminderHour
+        self.reminderMinute = reminderMinute
+        self.lastCompletedDate = lastCompletedDate
     }
 }
 
@@ -38,19 +72,26 @@ struct TaskItem: Identifiable {
 }
 
 struct QuoteItem: Codable, Identifiable, Equatable {
-    let id: String
-    let content: String
+    let id: Int
+    let quote: String
     let author: String
-
-    enum CodingKeys: String, CodingKey {
-        case id = "_id"
-        case content
-        case author
-    }
 }
 
 struct QuoteResponse: Codable {
-    let results: [QuoteItem]
-    let page: Int
-    let totalPages: Int
+    let quotes: [QuoteItem]
+    let total: Int
+    let skip: Int
+    let limit: Int
+}
+
+struct EnergySummary {
+    let average: Double
+    let minimum: Int
+    let maximum: Int
+}
+
+struct EnergyTrendPoint: Identifiable {
+    let id = UUID()
+    let date: Date
+    let value: Double
 }

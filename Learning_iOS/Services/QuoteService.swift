@@ -1,12 +1,18 @@
 import Foundation
 
 protocol QuoteServicing {
-    func fetchQuotes(page: Int) async throws -> QuoteResponse
+    func fetchQuotes(limit: Int, skip: Int) async throws -> QuoteResponse
 }
 
 struct QuoteService: QuoteServicing {
-    func fetchQuotes(page: Int) async throws -> QuoteResponse {
-        guard let url = URL(string: "https://api.quotable.io/quotes?page=\(page)") else {
+    func fetchQuotes(limit: Int, skip: Int) async throws -> QuoteResponse {
+        var components = URLComponents(string: "https://dummyjson.com/quotes")
+        components?.queryItems = [
+            URLQueryItem(name: "limit", value: String(limit)),
+            URLQueryItem(name: "skip", value: String(skip))
+        ]
+
+        guard let url = components?.url else {
             throw URLError(.badURL)
         }
 

@@ -1,0 +1,74 @@
+"tab_energy" = "Energy";
+"tab_habits" = "Habits";
+"tab_tasks" = "Tasks";
+"tab_explore" = "Explore";
+"tab_settings" = "Settings";
+
+"hello" = "Hello";
+"hello_with_name" = "Hello, %@";
+"enter_name" = "Enter name";
+"your_name" = "Your Name";
+"name_placeholder" = "Type your name";
+"save" = "Save";
+"cancel" = "Cancel";
+"ok" = "OK";
+
+"open_uikit_version" = "Open UIKit Version";
+
+"energy_physical" = "Physical";
+"energy_emotional" = "Emotional";
+"energy_intellectual" = "Intellectual";
+"energy_spiritual" = "Spiritual";
+"energy_physical_desc" = "Movement, sleep, and nutrition are your base fuel.";
+"energy_emotional_desc" = "Mood and stress shape your daily momentum.";
+"energy_intellectual_desc" = "Deep focus and learning keep your edge sharp.";
+"energy_spiritual_desc" = "Meaning and reflection anchor your priorities.";
+"energy_log_metric" = "Log metric";
+"energy_rating" = "Rating";
+"energy_note_placeholder" = "Optional note";
+"save_entry" = "Save entry";
+"recent_entries" = "Recent entries";
+"no_entries" = "No entries for this category yet.";
+"energy_analytics" = "Analytics";
+"energy_avg" = "Avg";
+"energy_min" = "Min";
+"energy_max" = "Max";
+"last_7_days" = "Last 7 days";
+"last_30_days" = "Last 30 days";
+"energy_trend" = "Trend";
+"trend_empty" = "No trend data yet.";
+
+"add_habit" = "Add habit";
+"edit_habit" = "Edit habit";
+"delete" = "Delete";
+"done_today" = "Done today";
+"streak" = "Streak";
+"streak_format" = "Streak: %d days";
+"habit_title" = "Title";
+"habit_icon" = "Icon";
+"habit_name_placeholder" = "Habit name";
+"reminder_enabled" = "Reminder enabled";
+"reminder_time" = "Reminder time";
+"habit_not_completed_message" = "Habit \"%@\" is not completed yet";
+
+"add_task" = "Add task";
+"empty_tasks" = "No tasks yet. Add one to start focused work.";
+"new_task" = "New task";
+"task_title_placeholder" = "Task title";
+"completed" = "Completed";
+"pending" = "Pending";
+
+"explore_title" = "Explore";
+"explore_loading" = "Loading...";
+"explore_retry" = "Retry";
+"explore_error" = "Unable to load quotes";
+"reload" = "Reload";
+
+"settings_title" = "Settings";
+"settings_language" = "Language";
+"language_russian" = "Russian";
+"language_english" = "English";
+"notifications_title" = "Notifications";
+"notifications_enabled" = "Enable notifications";
+"global_default_reminder" = "Default reminder time";
+"notifications_permission_denied" = "Notifications permission is denied. Please enable it in iOS Settings.";

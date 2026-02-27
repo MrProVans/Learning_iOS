@@ -5,8 +5,9 @@ import Combine
 final class QuotesViewModel: ObservableObject {
     @Published private(set) var quotes: [QuoteItem] = []
     @Published private(set) var isLoading = false
-    @Published private(set) var page = 1
-    @Published private(set) var totalPages = 1
+    @Published private(set) var skip = 0
+    @Published private(set) var limit = 20
+    @Published private(set) var total = 0
     @Published var errorMessage: String?
 
     private let service: QuoteServicing
@@ -19,46 +20,44 @@ final class QuotesViewModel: ObservableObject {
         self.init(service: QuoteService())
     }
 
-    var canLoadMore: Bool {
-        page <= totalPages
-    }
-
-    func loadInitialIfNeeded() async {
-        guard quotes.isEmpty else { return }
-        await reload()
-    }
-
-    func reload() async {
-        page = 1
-        totalPages = 1
+    func loadInitial() async {
+        skip = 0
+        total = 0
         quotes = []
         errorMessage = nil
-        await loadNextPage()
+        await loadMore()
     }
 
-    func loadNextIfNeeded(currentItem: QuoteItem?) async {
-        guard let currentItem else {
-            if quotes.isEmpty { await loadNextPage() }
+    func loadMoreIfNeeded(currentItem: QuoteItem?) async {
+        guard !isLoading else { return }
+
+        if let currentItem,
+           let index = quotes.firstIndex(where: { $0.id == currentItem.id }),
+           index < max(quotes.count - 3, 0) {
             return
         }
 
-        let thresholdIndex = max(quotes.count - 4, 0)
-        if let index = quotes.firstIndex(where: { $0.id == currentItem.id }), index >= thresholdIndex {
-            await loadNextPage()
-        }
+        guard total == 0 || skip < total else { return }
+        await loadMore()
     }
 
-    private func loadNextPage() async {
-        guard !isLoading, canLoadMore else { return }
+    private func loadMore() async {
+        guard !isLoading else { return }
 
         isLoading = true
         errorMessage = nil
 
         do {
-            let response = try await service.fetchQuotes(page: page)
-            quotes.append(contentsOf: response.results)
-            totalPages = response.totalPages
-            page = response.page + 1
+            let response = try await service.fetchQuotes(limit: limit, skip: skip)
+            total = response.total
+            skip = response.skip + response.limit
+
+            if response.skip == 0 {
+                quotes = response.quotes
+            } else {
+                let existingIDs = Set(quotes.map(\.id))
+                quotes.append(contentsOf: response.quotes.filter { !existingIDs.contains($0.id) })
+            }
         } catch {
             errorMessage = error.localizedDescription
         }

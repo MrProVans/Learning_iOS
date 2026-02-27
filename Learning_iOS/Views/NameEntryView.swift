@@ -1,18 +1,21 @@
 import SwiftUI
 
 struct NameEntryView: View {
+    @EnvironmentObject private var localization: LocalizationManager
     @ObservedObject var profileVM: ProfileViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var draftName = ""
 
     var body: some View {
+        let _ = localization.currentLanguage
+
         VStack(spacing: 20) {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Your Name")
+                Text(L("your_name"))
                     .font(.headline)
                     .foregroundStyle(AppTheme.textPrimary)
 
-                TextField("Type your name", text: $draftName)
+                TextField(L("name_placeholder"), text: $draftName)
                     .textInputAutocapitalization(.words)
                     .autocorrectionDisabled()
                     .padding(12)
@@ -26,7 +29,7 @@ struct NameEntryView: View {
             }
             .appCardStyle()
 
-            Button("Save") {
+            Button(L("save")) {
                 profileVM.save(draftName)
                 dismiss()
             }
@@ -36,7 +39,7 @@ struct NameEntryView: View {
         }
         .padding(16)
         .appScreenBackground()
-        .navigationTitle("Enter name")
+        .navigationTitle(L("enter_name"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(AppTheme.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
@@ -45,4 +48,3 @@ struct NameEntryView: View {
         }
     }
 }
-

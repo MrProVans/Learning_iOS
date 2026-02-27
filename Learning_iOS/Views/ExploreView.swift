@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct ExploreView: View {
+    @EnvironmentObject private var localization: LocalizationManager
     @StateObject private var viewModel = QuotesViewModel()
 
     var body: some View {
+        let _ = localization.currentLanguage
+
         List {
             if let errorMessage = viewModel.errorMessage, viewModel.quotes.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Unable to load quotes")
+                    Text(L("explore_error"))
                         .font(.headline)
                         .foregroundStyle(AppTheme.textPrimary)
 
@@ -15,8 +18,8 @@ struct ExploreView: View {
                         .font(.subheadline)
                         .foregroundStyle(AppTheme.textSecondary)
 
-                    Button("Retry") {
-                        Task { await viewModel.reload() }
+                    Button(L("explore_retry")) {
+                        Task { await viewModel.loadInitial() }
                     }
                     .buttonStyle(GoldPrimaryButtonStyle())
                 }
@@ -25,7 +28,7 @@ struct ExploreView: View {
 
             ForEach(viewModel.quotes) { quote in
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("\"\(quote.content)\"")
+                    Text("\"\(quote.quote)\"")
                         .font(.body)
                         .foregroundStyle(AppTheme.textPrimary)
 
@@ -36,7 +39,7 @@ struct ExploreView: View {
                 .padding(.vertical, 8)
                 .listRowBackground(AppTheme.cardBackground)
                 .onAppear {
-                    Task { await viewModel.loadNextIfNeeded(currentItem: quote) }
+                    Task { await viewModel.loadMoreIfNeeded(currentItem: quote) }
                 }
             }
 
@@ -52,23 +55,27 @@ struct ExploreView: View {
         }
         .listStyle(.plain)
         .appScreenBackground()
-        .navigationTitle("Explore")
+        .navigationTitle(L("tab_explore"))
         .navigationBarTitleDisplayMode(.large)
         .toolbarBackground(AppTheme.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    Task { await viewModel.reload() }
+                    Task { await viewModel.loadInitial() }
                 } label: {
                     Image(systemName: "arrow.clockwise")
                         .foregroundStyle(AppTheme.accentGold)
                 }
             }
         }
+        .refreshable {
+            await viewModel.loadInitial()
+        }
         .task {
-            await viewModel.loadInitialIfNeeded()
+            if viewModel.quotes.isEmpty {
+                await viewModel.loadInitial()
+            }
         }
     }
 }
-

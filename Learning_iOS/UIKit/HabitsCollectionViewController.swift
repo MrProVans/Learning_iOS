@@ -23,7 +23,7 @@ final class HabitsCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Habits"
+        title = L("tab_habits")
         collectionView.backgroundColor = .appBackground
         collectionView.register(HabitCell.self, forCellWithReuseIdentifier: HabitCell.reuseID)
     }
@@ -106,7 +106,7 @@ private final class HabitCell: UICollectionViewCell {
     func configure(with habit: Habit) {
         iconView.image = UIImage(systemName: habit.sfSymbolName)
         titleLabel.text = habit.title
-        streakLabel.text = "Streak: \(habit.streak) days"
+        streakLabel.text = String(format: L("streak_format"), habit.streak)
         alpha = habit.isDoneToday ? 0.9 : 1.0
     }
 }

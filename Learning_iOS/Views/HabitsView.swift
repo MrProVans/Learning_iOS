@@ -1,21 +1,32 @@
 import SwiftUI
 
 struct HabitsView: View {
+    @EnvironmentObject private var localization: LocalizationManager
+    @EnvironmentObject private var notifications: NotificationManager
+    @Environment(\.scenePhase) private var scenePhase
+
     @StateObject private var viewModel = HabitsViewModel()
+    @State private var showEditor = false
+    @State private var editingHabit: Habit?
+    @State private var habitForDelete: Habit?
+    @State private var showDeleteAlert = false
+
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 12),
         GridItem(.flexible(), spacing: 12)
     ]
 
     var body: some View {
+        let _ = localization.currentLanguage
+
         ScrollView {
             VStack(spacing: 16) {
                 NavigationLink {
                     HabitsUIKitHostView()
-                        .navigationTitle("Habits (UIKit)")
+                        .navigationTitle("\(L("tab_habits")) (UIKit)")
                         .navigationBarTitleDisplayMode(.inline)
                 } label: {
-                    Text("Open UIKit Version")
+                    Text(L("open_uikit_version"))
                 }
                 .buttonStyle(GoldOutlineButtonStyle())
 
@@ -27,16 +38,87 @@ struct HabitsView: View {
                                     viewModel.toggle(habit)
                                 }
                             }
+                            .contextMenu {
+                                Button(L("edit_habit")) {
+                                    editingHabit = habit
+                                    showEditor = true
+                                }
+
+                                Button(L("delete"), role: .destructive) {
+                                    habitForDelete = habit
+                                    showDeleteAlert = true
+                                }
+                            }
                     }
                 }
             }
             .padding(16)
         }
         .appScreenBackground()
-        .navigationTitle("Habits")
+        .navigationTitle(L("tab_habits"))
         .navigationBarTitleDisplayMode(.large)
         .toolbarBackground(AppTheme.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    editingHabit = nil
+                    showEditor = true
+                } label: {
+                    Image(systemName: "plus")
+                        .foregroundStyle(AppTheme.accentGold)
+                }
+            }
+        }
+        .sheet(isPresented: $showEditor) {
+            HabitEditorView(
+                existingHabit: editingHabit,
+                iconChoices: viewModel.iconChoices,
+                defaultReminderTime: notifications.defaultReminderTime
+            ) { title, icon, reminderEnabled, reminderTime in
+                if let editingHabit {
+                    var updated = editingHabit
+                    updated.title = title
+                    updated.sfSymbolName = icon
+                    updated.reminderEnabled = reminderEnabled
+                    viewModel.updateHabit(updated, reminderTime: reminderTime)
+                } else {
+                    viewModel.addHabit(
+                        title: title,
+                        symbol: icon,
+                        reminderEnabled: reminderEnabled,
+                        reminderTime: reminderTime
+                    )
+                }
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                viewModel.normalizeForToday()
+                viewModel.checkForegroundReminder()
+            }
+        }
+        .alert(L("delete"), isPresented: $showDeleteAlert) {
+            Button(L("cancel"), role: .cancel) {}
+            Button(L("delete"), role: .destructive) {
+                guard let habitForDelete else { return }
+                viewModel.deleteHabit(habitForDelete)
+            }
+        } message: {
+            Text(habitForDelete?.title ?? "")
+        }
+        .alert(L("notifications_title"), isPresented: Binding(
+            get: { viewModel.pendingReminderHabitName != nil },
+            set: { show in
+                if !show { viewModel.clearReminderAlert() }
+            }
+        )) {
+            Button(L("ok"), role: .cancel) {
+                viewModel.clearReminderAlert()
+            }
+        } message: {
+            Text(String(format: L("habit_not_completed_message"), viewModel.pendingReminderHabitName ?? ""))
+        }
     }
 }
 
@@ -60,7 +142,7 @@ private struct HabitCard: View {
                 .font(.headline)
                 .foregroundStyle(AppTheme.textPrimary)
 
-            Text("Streak: \(habit.streak) days")
+            Text(String(format: L("streak_format"), habit.streak))
                 .font(.caption)
                 .foregroundStyle(AppTheme.textSecondary)
         }
@@ -70,4 +152,3 @@ private struct HabitCard: View {
         .opacity(habit.isDoneToday ? 0.92 : 1.0)
     }
 }
-

@@ -1,0 +1,74 @@
+"tab_energy" = "Энергия";
+"tab_habits" = "Привычки";
+"tab_tasks" = "Задачи";
+"tab_explore" = "Обзор";
+"tab_settings" = "Настройки";
+
+"hello" = "Привет";
+"hello_with_name" = "Привет, %@";
+"enter_name" = "Ввести имя";
+"your_name" = "Ваше имя";
+"name_placeholder" = "Введите имя";
+"save" = "Сохранить";
+"cancel" = "Отмена";
+"ok" = "OK";
+
+"open_uikit_version" = "Открыть UIKit-версию";
+
+"energy_physical" = "Физическая";
+"energy_emotional" = "Эмоциональная";
+"energy_intellectual" = "Интеллектуальная";
+"energy_spiritual" = "Духовная";
+"energy_physical_desc" = "Движение, сон и питание — ваша базовая энергия.";
+"energy_emotional_desc" = "Настроение и стресс формируют ваш темп дня.";
+"energy_intellectual_desc" = "Глубокая концентрация и обучение держат вас в форме.";
+"energy_spiritual_desc" = "Смысл и рефлексия помогают держать приоритеты.";
+"energy_log_metric" = "Записать метрику";
+"energy_rating" = "Оценка";
+"energy_note_placeholder" = "Заметка (необязательно)";
+"save_entry" = "Сохранить запись";
+"recent_entries" = "Последние записи";
+"no_entries" = "Для этой категории пока нет записей.";
+"energy_analytics" = "Аналитика";
+"energy_avg" = "Среднее";
+"energy_min" = "Мин";
+"energy_max" = "Макс";
+"last_7_days" = "Последние 7 дней";
+"last_30_days" = "Последние 30 дней";
+"energy_trend" = "Тренд";
+"trend_empty" = "Пока нет данных для тренда.";
+
+"add_habit" = "Добавить привычку";
+"edit_habit" = "Редактировать привычку";
+"delete" = "Удалить";
+"done_today" = "Сделано сегодня";
+"streak" = "Серия";
+"streak_format" = "Серия: %d дней";
+"habit_title" = "Название";
+"habit_icon" = "Иконка";
+"habit_name_placeholder" = "Название привычки";
+"reminder_enabled" = "Напоминание включено";
+"reminder_time" = "Время напоминания";
+"habit_not_completed_message" = "Привычка \"%@\" еще не выполнена";
+
+"add_task" = "Добавить задачу";
+"empty_tasks" = "Пока нет задач. Добавьте задачу для фокуса.";
+"new_task" = "Новая задача";
+"task_title_placeholder" = "Название задачи";
+"completed" = "Выполнено";
+"pending" = "В процессе";
+
+"explore_title" = "Обзор";
+"explore_loading" = "Загрузка...";
+"explore_retry" = "Повторить";
+"explore_error" = "Не удалось загрузить цитаты";
+"reload" = "Обновить";
+
+"settings_title" = "Настройки";
+"settings_language" = "Язык";
+"language_russian" = "Русский";
+"language_english" = "Английский";
+"notifications_title" = "Уведомления";
+"notifications_enabled" = "Включить уведомления";
+"global_default_reminder" = "Время напоминания по умолчанию";
+"notifications_permission_denied" = "Нет доступа к уведомлениям. Включите их в настройках iOS.";

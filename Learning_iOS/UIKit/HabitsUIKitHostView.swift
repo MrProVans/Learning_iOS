@@ -13,5 +13,7 @@ struct HabitsUIKitHostView: UIViewControllerRepresentable {
         return nav
     }
 
-    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {
+        uiViewController.topViewController?.title = L("tab_habits")
+    }
 }

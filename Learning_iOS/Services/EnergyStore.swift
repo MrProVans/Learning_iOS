@@ -22,3 +22,4 @@ final class EnergyStore {
         UserDefaults.standard.set(data, forKey: key)
     }
 }
+

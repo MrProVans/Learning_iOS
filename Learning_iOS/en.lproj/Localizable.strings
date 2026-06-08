@@ -72,3 +72,48 @@
 "notifications_enabled" = "Enable notifications";
 "global_default_reminder" = "Default reminder time";
 "notifications_permission_denied" = "Notifications permission is denied. Please enable it in iOS Settings.";
+
+"settings_interaction" = "Interaction";
+"settings_haptics_enabled" = "Haptic feedback";
+"settings_sound_enabled" = "Sound effects";
+"settings_about" = "About";
+"settings_version" = "Version 1.0";
+"settings_app_description" = "Personal energy, habits and focus tracker.";
+
+"energy_today_title" = "Today's energy";
+"energy_no_score" = "No score yet";
+"energy_completed_categories_format" = "%d of %d categories";
+"energy_status_empty" = "Log one category to see your daily status.";
+"energy_status_low" = "Low energy. Keep the plan gentle today.";
+"energy_status_stable" = "Stable energy. Good day for steady focus.";
+"energy_status_strong" = "Strong energy. Use it on meaningful work.";
+
+"habits_today_title" = "Today's habits";
+"habits_completed_total_format" = "%d of %d habits completed";
+"habits_empty_title" = "No habits yet";
+"habits_empty_message" = "Add one small habit to start building a streak.";
+
+"tasks_today_focus" = "Today's focus";
+"tasks_completed_total_format" = "%d of %d tasks completed";
+"tasks_progress_percent_format" = "%d%% complete";
+"tasks_empty_title" = "No matching tasks";
+"tasks_filter_empty" = "Try another filter or add a new task.";
+"task_filter_title" = "Filter";
+"task_filter_all" = "All";
+"task_filter_active" = "Active";
+"task_filter_done" = "Done";
+"edit_task" = "Edit task";
+"task_details" = "Task details";
+"task_priority" = "Priority";
+"task_priority_low" = "Low";
+"task_priority_medium" = "Medium";
+"task_priority_high" = "High";
+"task_has_due_date" = "Add due date";
+"task_due_date" = "Due date";
+"task_notes_placeholder" = "Notes";
+
+"quote_filter_title" = "Quotes";
+"quote_filter_all" = "All";
+"quote_filter_favorites" = "Favorites";
+"quotes_no_favorites_title" = "No favorite quotes yet";
+"quotes_no_favorites_message" = "Tap the star on a quote to save it here.";

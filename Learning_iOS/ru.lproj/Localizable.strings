@@ -72,3 +72,48 @@
 "notifications_enabled" = "Включить уведомления";
 "global_default_reminder" = "Время напоминания по умолчанию";
 "notifications_permission_denied" = "Нет доступа к уведомлениям. Включите их в настройках iOS.";
+
+"settings_interaction" = "Взаимодействие";
+"settings_haptics_enabled" = "Тактильный отклик";
+"settings_sound_enabled" = "Звуковые эффекты";
+"settings_about" = "О приложении";
+"settings_version" = "Версия 1.0";
+"settings_app_description" = "Трекер личной энергии, привычек и фокуса.";
+
+"energy_today_title" = "Энергия сегодня";
+"energy_no_score" = "Пока нет оценки";
+"energy_completed_categories_format" = "%d из %d категорий";
+"energy_status_empty" = "Заполните одну категорию, чтобы увидеть статус дня.";
+"energy_status_low" = "Энергии мало. Сегодня лучше снизить нагрузку.";
+"energy_status_stable" = "Энергия стабильная. Хороший день для спокойного фокуса.";
+"energy_status_strong" = "Энергии много. Направьте ее на важную работу.";
+
+"habits_today_title" = "Привычки сегодня";
+"habits_completed_total_format" = "Выполнено %d из %d привычек";
+"habits_empty_title" = "Привычек пока нет";
+"habits_empty_message" = "Добавьте одну маленькую привычку, чтобы начать серию.";
+
+"tasks_today_focus" = "Фокус сегодня";
+"tasks_completed_total_format" = "Выполнено %d из %d задач";
+"tasks_progress_percent_format" = "Выполнено на %d%%";
+"tasks_empty_title" = "Нет подходящих задач";
+"tasks_filter_empty" = "Попробуйте другой фильтр или добавьте новую задачу.";
+"task_filter_title" = "Фильтр";
+"task_filter_all" = "Все";
+"task_filter_active" = "Активные";
+"task_filter_done" = "Готово";
+"edit_task" = "Редактировать задачу";
+"task_details" = "Детали задачи";
+"task_priority" = "Приоритет";
+"task_priority_low" = "Низкий";
+"task_priority_medium" = "Средний";
+"task_priority_high" = "Высокий";
+"task_has_due_date" = "Добавить срок";
+"task_due_date" = "Срок";
+"task_notes_placeholder" = "Заметки";
+
+"quote_filter_title" = "Цитаты";
+"quote_filter_all" = "Все";
+"quote_filter_favorites" = "Избранное";
+"quotes_no_favorites_title" = "Избранных цитат пока нет";
+"quotes_no_favorites_message" = "Нажмите на звезду у цитаты, чтобы сохранить ее здесь.";

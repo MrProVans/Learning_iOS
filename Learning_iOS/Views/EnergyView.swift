@@ -16,6 +16,7 @@ struct EnergyView: View {
 
         ScrollView {
             VStack(spacing: 20) {
+                energyOverviewCard
                 greetingCard
                 energyCarouselCard
                 metricLogCard
@@ -28,6 +29,23 @@ struct EnergyView: View {
         .navigationBarTitleDisplayMode(.large)
         .toolbarBackground(AppTheme.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+    }
+
+    private var energyOverviewCard: some View {
+        let averageText = energyVM.todayAverageEnergy.map { String(format: "%.1f / 10", $0) } ?? L("energy_no_score")
+        let completedText = String(
+            format: L("energy_completed_categories_format"),
+            energyVM.completedCategoriesToday,
+            energyVM.totalCategoriesCount
+        )
+
+        return ProgressSummaryCard(
+            title: L("energy_today_title"),
+            subtitle: "\(averageText) · \(completedText)",
+            progress: Double(energyVM.completedCategoriesToday) / Double(max(energyVM.totalCategoriesCount, 1)),
+            detail: L(energyVM.energyStatusTextKey),
+            symbolName: "bolt.heart"
+        )
     }
 
     private var greetingCard: some View {
@@ -69,11 +87,11 @@ struct EnergyView: View {
                 .buttonStyle(GoldOutlineButtonStyle())
                 .frame(maxWidth: 80)
 
-                Image(systemName: energyVM.currentCategory.sfSymbolName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 112, height: 112)
-                    .foregroundStyle(AppTheme.accentGold)
+                AppIconImageView(
+                    assetName: energyVM.currentCategory.imageAssetName,
+                    fallbackSystemName: energyVM.currentCategory.sfSymbolName,
+                    size: 112
+                )
                     .padding(24)
                     .background(AppTheme.accentGold.opacity(0.08))
                     .clipShape(RoundedRectangle(cornerRadius: 16))

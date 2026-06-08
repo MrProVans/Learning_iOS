@@ -21,6 +21,14 @@ struct HabitsView: View {
 
         ScrollView {
             VStack(spacing: 16) {
+                ProgressSummaryCard(
+                    title: L("habits_today_title"),
+                    subtitle: String(format: L("habits_completed_total_format"), viewModel.completedTodayCount, viewModel.totalHabitsCount),
+                    progress: viewModel.completionProgress,
+                    detail: String(format: L("tasks_progress_percent_format"), Int(viewModel.completionProgress * 100)),
+                    symbolName: "checkmark.seal"
+                )
+
                 NavigationLink {
                     HabitsUIKitHostView()
                         .navigationTitle("\(L("tab_habits")) (UIKit)")
@@ -30,25 +38,37 @@ struct HabitsView: View {
                 }
                 .buttonStyle(GoldOutlineButtonStyle())
 
-                LazyVGrid(columns: columns, spacing: 12) {
-                    ForEach(viewModel.habits) { habit in
-                        HabitCard(habit: habit)
-                            .onTapGesture {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                                    viewModel.toggle(habit)
+                if viewModel.habits.isEmpty {
+                    EmptyStateView(
+                        title: L("habits_empty_title"),
+                        message: L("habits_empty_message"),
+                        systemImage: "square.grid.2x2",
+                        buttonTitle: L("add_habit")
+                    ) {
+                        editingHabit = nil
+                        showEditor = true
+                    }
+                } else {
+                    LazyVGrid(columns: columns, spacing: 12) {
+                        ForEach(viewModel.habits) { habit in
+                            HabitCard(habit: habit)
+                                .onTapGesture {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                        viewModel.toggle(habit)
+                                    }
                                 }
-                            }
-                            .contextMenu {
-                                Button(L("edit_habit")) {
-                                    editingHabit = habit
-                                    showEditor = true
-                                }
+                                .contextMenu {
+                                    Button(L("edit_habit")) {
+                                        editingHabit = habit
+                                        showEditor = true
+                                    }
 
-                                Button(L("delete"), role: .destructive) {
-                                    habitForDelete = habit
-                                    showDeleteAlert = true
+                                    Button(L("delete"), role: .destructive) {
+                                        habitForDelete = habit
+                                        showDeleteAlert = true
+                                    }
                                 }
-                            }
+                        }
                     }
                 }
             }
@@ -128,9 +148,7 @@ private struct HabitCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Image(systemName: habit.sfSymbolName)
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(AppTheme.accentGold)
+                AppIconImageView(assetName: nil, fallbackSystemName: habit.sfSymbolName, size: 24)
 
                 Spacer()
 

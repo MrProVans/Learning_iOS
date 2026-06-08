@@ -8,6 +8,16 @@ struct ExploreView: View {
         let _ = localization.currentLanguage
 
         List {
+            Section {
+                Picker(L("quote_filter_title"), selection: $viewModel.filter) {
+                    ForEach(QuoteFilter.allCases) { filter in
+                        Text(L(filter.titleKey)).tag(filter)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .listRowBackground(AppTheme.cardBackground)
+            }
+
             if let errorMessage = viewModel.errorMessage, viewModel.quotes.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     Text(L("explore_error"))
@@ -26,15 +36,37 @@ struct ExploreView: View {
                 .listRowBackground(AppTheme.background)
             }
 
-            ForEach(viewModel.quotes) { quote in
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("\"\(quote.quote)\"")
-                        .font(.body)
-                        .foregroundStyle(AppTheme.textPrimary)
+            if viewModel.visibleQuotes.isEmpty && viewModel.filter == .favorites && !viewModel.isLoading {
+                EmptyStateView(
+                    title: L("quotes_no_favorites_title"),
+                    message: L("quotes_no_favorites_message"),
+                    systemImage: "star"
+                )
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(AppTheme.background)
+            }
 
-                    Text("- \(quote.author)")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(AppTheme.textSecondary)
+            ForEach(viewModel.visibleQuotes) { quote in
+                HStack(alignment: .top, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("\"\(quote.quote)\"")
+                            .font(.body)
+                            .foregroundStyle(AppTheme.textPrimary)
+
+                        Text("- \(quote.author)")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(AppTheme.textSecondary)
+                    }
+
+                    Spacer()
+
+                    Button {
+                        viewModel.toggleFavorite(quote)
+                    } label: {
+                        Image(systemName: viewModel.isFavorite(quote) ? "star.fill" : "star")
+                            .foregroundStyle(AppTheme.accentGold)
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.vertical, 8)
                 .listRowBackground(AppTheme.cardBackground)
@@ -62,6 +94,7 @@ struct ExploreView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    AppFeedbackManager.shared.tap()
                     Task { await viewModel.loadInitial() }
                 } label: {
                     Image(systemName: "arrow.clockwise")
@@ -70,6 +103,7 @@ struct ExploreView: View {
             }
         }
         .refreshable {
+            AppFeedbackManager.shared.tap()
             await viewModel.loadInitial()
         }
         .task {

@@ -5,6 +5,7 @@ struct EnergyCategory: Identifiable, Codable, Hashable {
     let titleKey: String
     let sfSymbolName: String
     let descriptionKey: String
+    let imageAssetName: String
 }
 
 struct EnergyEntry: Identifiable, Codable {
@@ -57,17 +58,63 @@ struct Habit: Identifiable, Codable, Equatable {
     }
 }
 
-struct TaskItem: Identifiable {
+enum TaskPriority: String, Codable, CaseIterable, Identifiable {
+    case low
+    case medium
+    case high
+
+    var id: String { rawValue }
+
+    var titleKey: String {
+        switch self {
+        case .low: return "task_priority_low"
+        case .medium: return "task_priority_medium"
+        case .high: return "task_priority_high"
+        }
+    }
+
+    var sfSymbolName: String {
+        switch self {
+        case .low: return "arrow.down.circle"
+        case .medium: return "minus.circle"
+        case .high: return "exclamationmark.circle.fill"
+        }
+    }
+
+    var sortingWeight: Int {
+        switch self {
+        case .low: return 0
+        case .medium: return 1
+        case .high: return 2
+        }
+    }
+}
+
+struct TaskItem: Identifiable, Codable, Equatable {
     let id: UUID
-    let title: String
+    var title: String
     var isDone: Bool
     let createdAt: Date
+    var priority: TaskPriority
+    var dueDate: Date?
+    var notes: String?
 
-    init(id: UUID = UUID(), title: String, isDone: Bool = false, createdAt: Date = Date()) {
+    init(
+        id: UUID = UUID(),
+        title: String,
+        isDone: Bool = false,
+        createdAt: Date = Date(),
+        priority: TaskPriority = .medium,
+        dueDate: Date? = nil,
+        notes: String? = nil
+    ) {
         self.id = id
         self.title = title
         self.isDone = isDone
         self.createdAt = createdAt
+        self.priority = priority
+        self.dueDate = dueDate
+        self.notes = notes
     }
 }
 

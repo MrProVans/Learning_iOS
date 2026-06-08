@@ -2,12 +2,12 @@ import UIKit
 
 final class HabitsCollectionViewController: UICollectionViewController {
     private var habits: [Habit] = [
-        Habit(title: "Morning Walk", sfSymbolName: "figure.walk", streak: 6),
-        Habit(title: "Deep Work", sfSymbolName: "timer", streak: 4),
-        Habit(title: "Read 20 min", sfSymbolName: "book.fill", streak: 9),
-        Habit(title: "Hydrate", sfSymbolName: "drop.fill", streak: 11),
-        Habit(title: "No Late Scroll", sfSymbolName: "moon.zzz.fill", streak: 3),
-        Habit(title: "Journal", sfSymbolName: "pencil.and.list.clipboard", streak: 5)
+        Habit(title: L("starter_habit_walk"), sfSymbolName: "figure.walk", streak: 6),
+        Habit(title: L("starter_habit_deep_work"), sfSymbolName: "timer", streak: 4),
+        Habit(title: L("starter_habit_read"), sfSymbolName: "book.fill", streak: 9),
+        Habit(title: L("starter_habit_hydrate"), sfSymbolName: "drop.fill", streak: 11),
+        Habit(title: L("starter_habit_scroll"), sfSymbolName: "moon.zzz.fill", streak: 3),
+        Habit(title: L("starter_habit_journal"), sfSymbolName: "pencil.and.list.clipboard", streak: 5)
     ]
 
     init() {

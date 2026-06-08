@@ -1,6 +1,20 @@
 import Foundation
 import Combine
 
+enum QuoteFilter: String, CaseIterable, Identifiable {
+    case all
+    case favorites
+
+    var id: String { rawValue }
+
+    var titleKey: String {
+        switch self {
+        case .all: return "quote_filter_all"
+        case .favorites: return "quote_filter_favorites"
+        }
+    }
+}
+
 @MainActor
 final class QuotesViewModel: ObservableObject {
     @Published private(set) var quotes: [QuoteItem] = []
@@ -8,16 +22,30 @@ final class QuotesViewModel: ObservableObject {
     @Published private(set) var skip = 0
     @Published private(set) var limit = 20
     @Published private(set) var total = 0
+    @Published private(set) var favoriteIDs: Set<Int> = []
+    @Published var filter: QuoteFilter = .all
     @Published var errorMessage: String?
 
     private let service: QuoteServicing
+    private let favoritesStore: FavoriteQuotesStore
 
-    init(service: QuoteServicing) {
+    init(service: QuoteServicing, favoritesStore: FavoriteQuotesStore) {
         self.service = service
+        self.favoritesStore = favoritesStore
+        self.favoriteIDs = favoritesStore.loadIDs()
     }
 
     convenience init() {
-        self.init(service: QuoteService())
+        self.init(service: QuoteService(), favoritesStore: FavoriteQuotesStore())
+    }
+
+    var visibleQuotes: [QuoteItem] {
+        switch filter {
+        case .all:
+            return quotes
+        case .favorites:
+            return quotes.filter { favoriteIDs.contains($0.id) }
+        }
     }
 
     func loadInitial() async {
@@ -60,8 +88,37 @@ final class QuotesViewModel: ObservableObject {
             }
         } catch {
             errorMessage = error.localizedDescription
+            if quotes.isEmpty {
+                quotes = Self.makeFallbackQuotes()
+                total = quotes.count
+                skip = quotes.count
+            }
+            AppFeedbackManager.shared.error()
         }
 
         isLoading = false
+    }
+
+    func isFavorite(_ quote: QuoteItem) -> Bool {
+        favoriteIDs.contains(quote.id)
+    }
+
+    func toggleFavorite(_ quote: QuoteItem) {
+        if favoriteIDs.contains(quote.id) {
+            favoriteIDs.remove(quote.id)
+            AppFeedbackManager.shared.selectionChanged()
+        } else {
+            favoriteIDs.insert(quote.id)
+            AppFeedbackManager.shared.success()
+        }
+        favoritesStore.saveIDs(favoriteIDs)
+    }
+
+    private static func makeFallbackQuotes() -> [QuoteItem] {
+        [
+            QuoteItem(id: -1, quote: L("quote_fallback_one"), author: L("app_name")),
+            QuoteItem(id: -2, quote: L("quote_fallback_two"), author: L("app_name")),
+            QuoteItem(id: -3, quote: L("quote_fallback_three"), author: L("app_name"))
+        ]
     }
 }

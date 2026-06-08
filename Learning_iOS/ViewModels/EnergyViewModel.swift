@@ -4,10 +4,10 @@ import Combine
 @MainActor
 final class EnergyViewModel: ObservableObject {
     @Published private(set) var categories: [EnergyCategory] = [
-        EnergyCategory(id: "physical", titleKey: "energy_physical", sfSymbolName: "figure.run", descriptionKey: "energy_physical_desc"),
-        EnergyCategory(id: "emotional", titleKey: "energy_emotional", sfSymbolName: "heart.text.square", descriptionKey: "energy_emotional_desc"),
-        EnergyCategory(id: "intellectual", titleKey: "energy_intellectual", sfSymbolName: "brain.head.profile", descriptionKey: "energy_intellectual_desc"),
-        EnergyCategory(id: "spiritual", titleKey: "energy_spiritual", sfSymbolName: "sparkles", descriptionKey: "energy_spiritual_desc")
+        EnergyCategory(id: "physical", titleKey: "energy_physical", sfSymbolName: "figure.run", descriptionKey: "energy_physical_desc", imageAssetName: "energy_physical"),
+        EnergyCategory(id: "emotional", titleKey: "energy_emotional", sfSymbolName: "heart.text.square", descriptionKey: "energy_emotional_desc", imageAssetName: "energy_emotional"),
+        EnergyCategory(id: "intellectual", titleKey: "energy_intellectual", sfSymbolName: "brain.head.profile", descriptionKey: "energy_intellectual_desc", imageAssetName: "energy_intellectual"),
+        EnergyCategory(id: "spiritual", titleKey: "energy_spiritual", sfSymbolName: "sparkles", descriptionKey: "energy_spiritual_desc", imageAssetName: "energy_spiritual")
     ]
     @Published var currentIndex = 0
     @Published var metricRating = 5.0
@@ -29,14 +29,37 @@ final class EnergyViewModel: ObservableObject {
         categories[currentIndex]
     }
 
+    var totalCategoriesCount: Int {
+        categories.count
+    }
+
+    var completedCategoriesToday: Int {
+        Set(todayEntries.map(\.categoryId)).count
+    }
+
+    var todayAverageEnergy: Double? {
+        let ratings = todayEntries.map(\.rating)
+        guard !ratings.isEmpty else { return nil }
+        return Double(ratings.reduce(0, +)) / Double(ratings.count)
+    }
+
+    var energyStatusTextKey: String {
+        guard let average = todayAverageEnergy else { return "energy_status_empty" }
+        if average < 4 { return "energy_status_low" }
+        if average < 7 { return "energy_status_stable" }
+        return "energy_status_strong"
+    }
+
     func next() {
         guard !categories.isEmpty else { return }
         currentIndex = (currentIndex + 1) % categories.count
+        AppFeedbackManager.shared.selectionChanged()
     }
 
     func previous() {
         guard !categories.isEmpty else { return }
         currentIndex = (currentIndex - 1 + categories.count) % categories.count
+        AppFeedbackManager.shared.selectionChanged()
     }
 
     func saveCurrentEntry() {
@@ -50,9 +73,18 @@ final class EnergyViewModel: ObservableObject {
             note: trimmedNote.isEmpty ? nil : trimmedNote
         )
 
-        entries.insert(entry, at: 0)
+        if let existingIndex = entries.firstIndex(where: {
+            $0.categoryId == currentCategory.id && Calendar.current.isDate($0.date, inSameDayAs: dayDate)
+        }) {
+            entries[existingIndex] = entry
+        } else {
+            entries.insert(entry, at: 0)
+        }
+
+        entries.sort(by: { $0.date > $1.date })
         store.saveEntries(entries)
         note = ""
+        AppFeedbackManager.shared.success()
     }
 
     func recentEntries(for categoryId: String, limit: Int = 7) -> [EnergyEntry] {
@@ -99,5 +131,9 @@ final class EnergyViewModel: ObservableObject {
         return entries.filter {
             $0.categoryId == categoryId && $0.date >= startDate
         }
+    }
+
+    private var todayEntries: [EnergyEntry] {
+        entries.filter { Calendar.current.isDateInToday($0.date) }
     }
 }

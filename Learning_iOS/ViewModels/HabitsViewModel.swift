@@ -29,10 +29,10 @@ final class HabitsViewModel: ObservableObject {
         let savedHabits = store.loadHabits()
         if savedHabits.isEmpty {
             self.habits = [
-                Habit(title: "Morning Walk", sfSymbolName: "figure.walk", streak: 6),
-                Habit(title: "Deep Work", sfSymbolName: "timer", streak: 4),
-                Habit(title: "Read 20 min", sfSymbolName: "book.fill", streak: 9),
-                Habit(title: "Hydrate", sfSymbolName: "drop.fill", streak: 11)
+                Habit(title: L("starter_habit_walk"), sfSymbolName: "figure.walk", streak: 6),
+                Habit(title: L("starter_habit_deep_work"), sfSymbolName: "timer", streak: 4),
+                Habit(title: L("starter_habit_read"), sfSymbolName: "book.fill", streak: 9),
+                Habit(title: L("starter_habit_hydrate"), sfSymbolName: "drop.fill", streak: 11)
             ]
         } else {
             self.habits = savedHabits
@@ -44,6 +44,19 @@ final class HabitsViewModel: ObservableObject {
 
     convenience init() {
         self.init(store: HabitsStore(), notifications: .shared)
+    }
+
+    var completedTodayCount: Int {
+        habits.filter(\.isDoneToday).count
+    }
+
+    var totalHabitsCount: Int {
+        habits.count
+    }
+
+    var completionProgress: Double {
+        guard !habits.isEmpty else { return 0 }
+        return Double(completedTodayCount) / Double(habits.count)
     }
 
     func toggle(_ habit: Habit) {
@@ -72,6 +85,7 @@ final class HabitsViewModel: ObservableObject {
         }
 
         persistAndSchedule()
+        habits[index].isDoneToday ? AppFeedbackManager.shared.success() : AppFeedbackManager.shared.selectionChanged()
     }
 
     func addHabit(title: String, symbol: String, reminderEnabled: Bool, reminderTime: Date) {
@@ -89,6 +103,7 @@ final class HabitsViewModel: ObservableObject {
 
         habits.append(habit)
         persistAndSchedule()
+        AppFeedbackManager.shared.success()
     }
 
     func updateHabit(_ updated: Habit, reminderTime: Date) {
@@ -102,11 +117,13 @@ final class HabitsViewModel: ObservableObject {
         habits[index].reminderMinute = components.minute ?? habits[index].reminderMinute
 
         persistAndSchedule()
+        AppFeedbackManager.shared.success()
     }
 
     func deleteHabit(_ habit: Habit) {
         habits.removeAll(where: { $0.id == habit.id })
         persistAndSchedule()
+        AppFeedbackManager.shared.warning()
     }
 
     func reminderDate(for habit: Habit) -> Date {

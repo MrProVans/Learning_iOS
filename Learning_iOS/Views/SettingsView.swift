@@ -3,8 +3,10 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject private var localization: LocalizationManager
     @EnvironmentObject private var notifications: NotificationManager
+    @EnvironmentObject private var feedback: AppFeedbackManager
 
     @State private var showNotificationAlert = false
+    @State private var showOnboarding = false
 
     var body: some View {
         let _ = localization.currentLanguage
@@ -17,6 +19,9 @@ struct SettingsView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .onChange(of: localization.currentLanguage) { _, _ in
+                    feedback.selectionChanged()
+                }
             }
             .listRowBackground(AppTheme.cardBackground)
 
@@ -30,6 +35,9 @@ struct SettingsView: View {
                                 let success = await notifications.setNotificationsEnabled(value)
                                 if !success {
                                     showNotificationAlert = true
+                                    feedback.error()
+                                } else {
+                                    feedback.success()
                                 }
                             }
                         }
@@ -40,10 +48,48 @@ struct SettingsView: View {
                     L("global_default_reminder"),
                     selection: Binding(
                         get: { notifications.defaultReminderTime },
-                        set: { notifications.setDefaultReminderTime($0) }
+                        set: {
+                            notifications.setDefaultReminderTime($0)
+                            feedback.selectionChanged()
+                        }
                     ),
                     displayedComponents: .hourAndMinute
                 )
+            }
+            .listRowBackground(AppTheme.cardBackground)
+
+            Section(L("settings_interaction")) {
+                Toggle(L("settings_haptics_enabled"), isOn: $feedback.hapticsEnabled)
+                Toggle(L("settings_sound_enabled"), isOn: $feedback.soundEffectsEnabled)
+            }
+            .listRowBackground(AppTheme.cardBackground)
+
+            Section(L("settings_about")) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(L("app_name"))
+                        .font(.headline)
+                        .foregroundStyle(AppTheme.textPrimary)
+                    Text(L("settings_version"))
+                        .font(.subheadline)
+                        .foregroundStyle(AppTheme.textSecondary)
+                    Text(L("settings_app_description"))
+                        .font(.subheadline)
+                        .foregroundStyle(AppTheme.textSecondary)
+                }
+                .padding(.vertical, 4)
+
+                NavigationLink {
+                    AchievementsView()
+                } label: {
+                    Label(L("achievements_title"), systemImage: "trophy.fill")
+                }
+
+                Button {
+                    AppFeedbackManager.shared.tap()
+                    showOnboarding = true
+                } label: {
+                    Label(L("settings_show_onboarding"), systemImage: "sparkles")
+                }
             }
             .listRowBackground(AppTheme.cardBackground)
         }
@@ -57,6 +103,14 @@ struct SettingsView: View {
             Button(L("ok"), role: .cancel) {}
         } message: {
             Text(L("notifications_permission_denied"))
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView {
+                showOnboarding = false
+            }
+            .environmentObject(localization)
+            .environmentObject(notifications)
+            .environmentObject(feedback)
         }
     }
 }

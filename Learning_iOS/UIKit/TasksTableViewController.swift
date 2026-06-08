@@ -2,9 +2,9 @@ import UIKit
 
 final class TasksTableViewController: UITableViewController {
     private var tasks: [TaskItem] = [
-        TaskItem(title: "Plan top 3 priorities"),
-        TaskItem(title: "Focus block: 45 minutes"),
-        TaskItem(title: "Evening energy review")
+        TaskItem(title: L("starter_task_plan"), priority: .high),
+        TaskItem(title: L("starter_task_focus"), priority: .medium),
+        TaskItem(title: L("starter_task_review"), priority: .low)
     ]
 
     override func viewDidLoad() {

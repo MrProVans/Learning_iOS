@@ -29,10 +29,10 @@ final class HabitsViewModel: ObservableObject {
         let savedHabits = store.loadHabits()
         if savedHabits.isEmpty {
             self.habits = [
-                Habit(title: "Morning Walk", sfSymbolName: "figure.walk", streak: 6),
-                Habit(title: "Deep Work", sfSymbolName: "timer", streak: 4),
-                Habit(title: "Read 20 min", sfSymbolName: "book.fill", streak: 9),
-                Habit(title: "Hydrate", sfSymbolName: "drop.fill", streak: 11)
+                Habit(title: L("starter_habit_walk"), sfSymbolName: "figure.walk", streak: 6),
+                Habit(title: L("starter_habit_deep_work"), sfSymbolName: "timer", streak: 4),
+                Habit(title: L("starter_habit_read"), sfSymbolName: "book.fill", streak: 9),
+                Habit(title: L("starter_habit_hydrate"), sfSymbolName: "drop.fill", streak: 11)
             ]
         } else {
             self.habits = savedHabits

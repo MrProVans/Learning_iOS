@@ -66,6 +66,7 @@ struct ExploreView: View {
                         Image(systemName: viewModel.isFavorite(quote) ? "star.fill" : "star")
                             .foregroundStyle(AppTheme.accentGold)
                     }
+                    .accessibilityLabel(viewModel.isFavorite(quote) ? L("accessibility_unfavorite_quote") : L("accessibility_favorite_quote"))
                     .buttonStyle(.plain)
                 }
                 .padding(.vertical, 8)
@@ -100,6 +101,7 @@ struct ExploreView: View {
                     Image(systemName: "arrow.clockwise")
                         .foregroundStyle(AppTheme.accentGold)
                 }
+                .accessibilityLabel(L("reload"))
             }
         }
         .refreshable {

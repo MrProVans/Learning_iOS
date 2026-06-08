@@ -29,9 +29,9 @@ final class TasksViewModel: ObservableObject {
         let savedTasks = store.loadTasks()
         if savedTasks.isEmpty {
             self.tasks = [
-                TaskItem(title: "Plan top 3 priorities", priority: .high),
-                TaskItem(title: "Focus block: 45 minutes", priority: .medium),
-                TaskItem(title: "Evening energy review", priority: .low)
+                TaskItem(title: L("starter_task_plan"), priority: .high),
+                TaskItem(title: L("starter_task_focus"), priority: .medium),
+                TaskItem(title: L("starter_task_review"), priority: .low)
             ]
         } else {
             self.tasks = savedTasks

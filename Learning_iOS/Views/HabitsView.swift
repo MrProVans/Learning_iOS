@@ -88,6 +88,7 @@ struct HabitsView: View {
                     Image(systemName: "plus")
                         .foregroundStyle(AppTheme.accentGold)
                 }
+                .accessibilityLabel(L("add_habit"))
             }
         }
         .sheet(isPresented: $showEditor) {

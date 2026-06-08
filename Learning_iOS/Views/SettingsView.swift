@@ -6,6 +6,7 @@ struct SettingsView: View {
     @EnvironmentObject private var feedback: AppFeedbackManager
 
     @State private var showNotificationAlert = false
+    @State private var showOnboarding = false
 
     var body: some View {
         let _ = localization.currentLanguage
@@ -65,7 +66,7 @@ struct SettingsView: View {
 
             Section(L("settings_about")) {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Focus & Energy")
+                    Text(L("app_name"))
                         .font(.headline)
                         .foregroundStyle(AppTheme.textPrimary)
                     Text(L("settings_version"))
@@ -76,6 +77,19 @@ struct SettingsView: View {
                         .foregroundStyle(AppTheme.textSecondary)
                 }
                 .padding(.vertical, 4)
+
+                NavigationLink {
+                    AchievementsView()
+                } label: {
+                    Label(L("achievements_title"), systemImage: "trophy.fill")
+                }
+
+                Button {
+                    AppFeedbackManager.shared.tap()
+                    showOnboarding = true
+                } label: {
+                    Label(L("settings_show_onboarding"), systemImage: "sparkles")
+                }
             }
             .listRowBackground(AppTheme.cardBackground)
         }
@@ -89,6 +103,14 @@ struct SettingsView: View {
             Button(L("ok"), role: .cancel) {}
         } message: {
             Text(L("notifications_permission_denied"))
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView {
+                showOnboarding = false
+            }
+            .environmentObject(localization)
+            .environmentObject(notifications)
+            .environmentObject(feedback)
         }
     }
 }

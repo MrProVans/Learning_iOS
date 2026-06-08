@@ -89,7 +89,7 @@ final class QuotesViewModel: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
             if quotes.isEmpty {
-                quotes = Self.fallbackQuotes
+                quotes = Self.makeFallbackQuotes()
                 total = quotes.count
                 skip = quotes.count
             }
@@ -114,9 +114,11 @@ final class QuotesViewModel: ObservableObject {
         favoritesStore.saveIDs(favoriteIDs)
     }
 
-    private static let fallbackQuotes: [QuoteItem] = [
-        QuoteItem(id: -1, quote: "Small steps still move the day forward.", author: "Focus & Energy"),
-        QuoteItem(id: -2, quote: "Energy follows attention.", author: "Focus & Energy"),
-        QuoteItem(id: -3, quote: "A clear task is already half lighter.", author: "Focus & Energy")
-    ]
+    private static func makeFallbackQuotes() -> [QuoteItem] {
+        [
+            QuoteItem(id: -1, quote: L("quote_fallback_one"), author: L("app_name")),
+            QuoteItem(id: -2, quote: L("quote_fallback_two"), author: L("app_name")),
+            QuoteItem(id: -3, quote: L("quote_fallback_three"), author: L("app_name"))
+        ]
+    }
 }

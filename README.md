@@ -1,18 +1,33 @@
 # Learning_iOS
 
-Learning_iOS is a SwiftUI university learning project for a personal productivity app called **Focus & Energy**. It combines energy tracking, habit tracking, tasks, quotes, localization, reminders, and interaction feedback in one dark black/gold/white interface.
+Learning_iOS is a SwiftUI university learning project for **InnerDrive**, a personal energy, habits and focus tracker for self-development. The app combines a dark black/gold/white visual identity with daily tracking, reminders, quotes, localization, achievements, and interaction feedback.
 
-## Features
+## Final Feature List
 
-- Energy tracker with four categories: physical, emotional, intellectual, spiritual.
-- Daily energy logging with notes, recent entries, and 7/30 day analytics.
+- Today dashboard with greeting, daily progress, focus task, energy, habits, quote and quick actions.
+- First-launch onboarding with three short product pages.
+- Energy tracker with physical, emotional, intellectual and spiritual categories.
+- Daily energy logging with notes, recent entries, update-on-same-day behavior, and 7/30 day analytics.
 - Habit tracker with streaks, add/edit/delete, reminders, and daily completion progress.
 - Task tracker with persistence, priorities, due dates, notes, filters, editing, and progress summary.
-- Explore tab with paginated quotes from DummyJSON and persistent favorites.
-- Settings for Russian/English language, notifications, haptics, and sound effects.
+- Explore screen with paginated quotes from DummyJSON and persistent favorites.
+- Achievements screen with locked and unlocked badges based on app activity.
+- Settings for Russian/English language, notifications, onboarding replay, haptics, and sound effects.
 - UIKit assignment screens for table and collection views remain available.
+- Custom app icon and support for future custom image assets.
 
-## Technologies Used
+## Screens
+
+- Today dashboard
+- Energy
+- Habits
+- Tasks
+- Explore
+- Settings
+- Achievements
+- Onboarding
+
+## Technologies
 
 - Swift
 - SwiftUI
@@ -21,8 +36,8 @@ Learning_iOS is a SwiftUI university learning project for a personal productivit
 - UserNotifications
 - URLSession
 - Runtime localization
+- Haptics and sound feedback
 - UIKit wrappers for assignment requirements
-- AudioToolbox and UIKit haptic feedback
 
 ## How To Run In Xcode
 
@@ -36,13 +51,18 @@ Learning_iOS is a SwiftUI university learning project for a personal productivit
 
 1. Connect the iPhone to the Mac.
 2. Select the iPhone as the run destination in Xcode.
-3. Open Signing & Capabilities and select a valid development team.
-4. Run the app.
+3. Open Signing & Capabilities and select a valid development team if needed.
+4. Press `Cmd + R`.
 5. If iOS asks, trust the developer profile in device settings.
+6. Test notifications after granting permission in the app.
 
-## Manual Testing Checklist
+## Manual QA Checklist
 
-- Launch app and switch between all tabs.
+- Launch app and confirm onboarding appears on first launch.
+- Use Skip and Get Started, then confirm onboarding does not reappear automatically.
+- Reopen onboarding from Settings.
+- Switch between all tabs.
+- Confirm Today dashboard loads with no data and updates after adding activity.
 - Save an energy entry.
 - Save another entry for the same category on the same day and confirm it updates instead of duplicating.
 - Open energy analytics and review 7/30 day summaries.
@@ -59,14 +79,15 @@ Learning_iOS is a SwiftUI university learning project for a personal productivit
 - Open Explore and refresh quotes.
 - Mark a quote as favorite.
 - Switch to the favorites filter.
+- Open Achievements and confirm locked/unlocked states display correctly.
 - Switch language between Russian and English.
 - Toggle haptics and sounds.
 - Confirm the app keeps the black/gold/white dark visual style.
 
 ## Future Improvements
 
-- Custom generated images for energy and habit categories.
+- Custom generated images for energy categories.
 - Home screen widgets.
-- Advanced analytics and deeper charts.
+- Swift Charts advanced analytics.
 - Data export.
 - iCloud sync.

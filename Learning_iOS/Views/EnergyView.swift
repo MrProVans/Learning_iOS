@@ -84,6 +84,7 @@ struct EnergyView: View {
                         .font(.title2.weight(.bold))
                         .frame(width: 42, height: 42)
                 }
+                .accessibilityLabel(L("accessibility_previous_energy"))
                 .buttonStyle(GoldOutlineButtonStyle())
                 .frame(maxWidth: 80)
 
@@ -103,6 +104,7 @@ struct EnergyView: View {
                         .font(.title2.weight(.bold))
                         .frame(width: 42, height: 42)
                 }
+                .accessibilityLabel(L("accessibility_next_energy"))
                 .buttonStyle(GoldOutlineButtonStyle())
                 .frame(maxWidth: 80)
             }

@@ -107,6 +107,7 @@ struct TasksView: View {
                     Image(systemName: "plus")
                         .foregroundStyle(AppTheme.accentGold)
                 }
+                .accessibilityLabel(L("add_task"))
             }
         }
         .sheet(isPresented: $isPresentingAdd) {
